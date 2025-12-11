@@ -32,3 +32,6 @@ Thumbs.db
 # Build
 build/
 out/
+
+# Node Modules
+node_modules/

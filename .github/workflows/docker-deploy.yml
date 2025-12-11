@@ -1,12 +1,16 @@
 name: Docker Build & Push
+
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build-and-push:
-    name: Build and Push Docker image
+  build-backend:
+    name: Build & Push Backend Docker Image
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./FairwayEcoBackend
     steps:
       - uses: actions/checkout@v4
       - name: Set up QEMU
@@ -18,13 +22,41 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push (if Dockerfile exists)
+      - name: Build and push Backend (if Dockerfile exists)
         env:
-          IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
+          IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/fairwayeco-backend
         run: |
           if [ -f Dockerfile ]; then
-            echo "Dockerfile found — building and pushing image: $IMAGE"
+            echo "Dockerfile found — building and pushing Backend image: $IMAGE"
             docker buildx build --platform linux/amd64,linux/arm64 -t "$IMAGE:${GITHUB_SHA::8}" -t "$IMAGE:latest" --push .
           else
-            echo "No Dockerfile found — skipping Docker build"
+            echo "No Dockerfile found — skipping Backend Docker build"
+          fi
+
+  build-frontend:
+    name: Build & Push Frontend Docker Image
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./FairwayEcoFrontend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push Frontend (if Dockerfile exists)
+        env:
+          IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/fairwayeco-frontend
+        run: |
+          if [ -f Dockerfile ]; then
+            echo "Dockerfile found — building and pushing Frontend image: $IMAGE"
+            docker buildx build --platform linux/amd64,linux/arm64 -t "$IMAGE:${GITHUB_SHA::8}" -t "$IMAGE:latest" --push .
+          else
+            echo "No Dockerfile found — skipping Frontend Docker build"
           fi
