@@ -3,11 +3,16 @@ name: Docker Build & Push
 on:
   push:
     branches: [ main ]
+  workflow_run:
+    workflows: [ "CI" ]
+    branches: [ main ]
+    types: [ completed ]
 
 jobs:
   build-backend:
     name: Build & Push Backend Docker Image
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' || (github.event.workflow_run.conclusion == 'success')
     defaults:
       run:
         working-directory: ./FairwayEcoBackend
@@ -22,20 +27,27 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+        if: ${{ secrets.DOCKERHUB_USERNAME != '' && secrets.DOCKERHUB_TOKEN != '' }}
       - name: Build and push Backend (if Dockerfile exists)
         env:
           IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/fairwayeco-backend
         run: |
           if [ -f Dockerfile ]; then
-            echo "Dockerfile found — building and pushing Backend image: $IMAGE"
-            docker buildx build --platform linux/amd64,linux/arm64 -t "$IMAGE:${GITHUB_SHA::8}" -t "$IMAGE:latest" --push .
+            if [ -z "${{ secrets.DOCKERHUB_USERNAME }}" ] || [ -z "${{ secrets.DOCKERHUB_TOKEN }}" ]; then
+              echo "⚠ Docker Hub credentials not set. Skipping push. Building locally only."
+              docker build -t "$IMAGE:local" .
+            else
+              echo "✓ Dockerfile found — building and pushing Backend image: $IMAGE"
+              docker buildx build --platform linux/amd64,linux/arm64 -t "$IMAGE:${GITHUB_SHA::8}" -t "$IMAGE:latest" --push .
+            fi
           else
-            echo "No Dockerfile found — skipping Backend Docker build"
+            echo "ℹ No Dockerfile found — skipping Backend Docker build"
           fi
 
   build-frontend:
     name: Build & Push Frontend Docker Image
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' || (github.event.workflow_run.conclusion == 'success')
     defaults:
       run:
         working-directory: ./FairwayEcoFrontend
@@ -50,13 +62,19 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+        if: ${{ secrets.DOCKERHUB_USERNAME != '' && secrets.DOCKERHUB_TOKEN != '' }}
       - name: Build and push Frontend (if Dockerfile exists)
         env:
           IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/fairwayeco-frontend
         run: |
           if [ -f Dockerfile ]; then
-            echo "Dockerfile found — building and pushing Frontend image: $IMAGE"
-            docker buildx build --platform linux/amd64,linux/arm64 -t "$IMAGE:${GITHUB_SHA::8}" -t "$IMAGE:latest" --push .
+            if [ -z "${{ secrets.DOCKERHUB_USERNAME }}" ] || [ -z "${{ secrets.DOCKERHUB_TOKEN }}" ]; then
+              echo "⚠ Docker Hub credentials not set. Skipping push. Building locally only."
+              docker build -t "$IMAGE:local" .
+            else
+              echo "✓ Dockerfile found — building and pushing Frontend image: $IMAGE"
+              docker buildx build --platform linux/amd64,linux/arm64 -t "$IMAGE:${GITHUB_SHA::8}" -t "$IMAGE:latest" --push .
+            fi
           else
-            echo "No Dockerfile found — skipping Frontend Docker build"
+            echo "ℹ No Dockerfile found — skipping Frontend Docker build"
           fi
