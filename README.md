@@ -18,6 +18,7 @@ docker-compose up -d
 
 - [Architektur & Mermaid-Diagramme](./wiki/01-Projektdefinition.md)
 - [Kompetenznachweise A1E-F1E](./wiki/03-Kompetenznachweise.md)
+- [CI/CD Pipeline - GitHub Actions](./wiki/05-CICD-Pipeline.md)
 - [Testing: 89 Tests, 90% Coverage](./wiki/06-Testing.md)
 - [Postman Collections](./postman/README.md)
 

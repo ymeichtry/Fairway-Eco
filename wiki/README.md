@@ -40,6 +40,13 @@ Diese Wiki-Dokumentation ist strukturiert gemäß den Aufgabenstellungen und dem
    - Wöchentliche Updates
    - **Aufgabe 2b** ✓
 
+5. **[CI/CD Pipeline - GitHub Actions](05-CICD-Pipeline.md)**
+
+   - Build, Test, Deploy Stages
+   - Automatische Docker Image Versionierung
+   - DockerHub Registry Integration
+   - **Pipeline vollständig implementiert** ✓
+
 6. **[Testing & Quality Assurance](06-Testing.md)**
    - Unit Tests (89 Tests)
    - Integration Tests
@@ -51,8 +58,6 @@ Diese Wiki-Dokumentation ist strukturiert gemäß den Aufgabenstellungen und dem
 **Projekt**: Fairway-Eco - Nachhaltige Golf-Ball-Shop
 **Ziel**: Implementierung einer Microservices-Architektur
 **Team**: Oliver, Yannis, Joel
-**Zeitraum**: Januar 2026  
-**Repository**: https://github.com/[username]/Fairway-Eco
 
 ## 🏗️ Technologie-Stack
 
