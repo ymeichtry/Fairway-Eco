@@ -236,6 +236,29 @@ cd FairwayEcoBackend
 ./mvnw test
 ```
 
+**Test Coverage**:
+
+- ✅ **89 unit tests** across all architectural layers
+- ✅ Service Layer: 37 tests (GolfBall, Customer, Order services)
+- ✅ Controller Layer: 27 tests (REST API endpoints with MockMvc)
+- ✅ Repository Layer: 24 tests (JPA custom queries with H2)
+- ✅ Integration Tests: Spring Boot context loading
+
+**Testing Frameworks**:
+
+- JUnit 5 (Jupiter) for test structure
+- Mockito for mocking dependencies
+- AssertJ for fluent assertions
+- Spring Boot Test (@WebMvcTest, @DataJpaTest)
+- H2 in-memory database for repository tests
+
+### Eureka Server
+
+```bash
+cd FairwayEcoEureka
+./mvnw test
+```
+
 ### Frontend
 
 ```bash
@@ -269,6 +292,7 @@ Check Circuit Breaker status at: http://localhost:8080/actuator/health (look for
 - ✅ **Docker Compose** for full-stack deployment
 - ✅ **Production-ready CORS** configuration
 - ✅ **Health Checks** for all services
+- ✅ **Comprehensive Unit Tests** (89 tests across all layers)
 
 - Gateway: Change `server.port` in `FairwayEcoGateway/src/main/resources/application.properties`
 - Backend: Change `server.port` in `FairwayEcoBackend/src/main/resources/application.properties`
