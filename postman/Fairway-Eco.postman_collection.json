@@ -1,0 +1,458 @@
+{
+	"info": {
+		"_postman_id": "fairway-eco-api",
+		"name": "Fairway-Eco API",
+		"description": "Complete API collection for Fairway-Eco golf ball trading platform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Golf Balls",
+			"item": [
+				{
+					"name": "Get All Golf Balls",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/golfballs",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "golfballs"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Golf Ball by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/golfballs/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "golfballs", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Golf Ball",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"brand\": \"Titleist\",\n  \"model\": \"Pro V1\",\n  \"condition\": \"MINT\",\n  \"price\": 29.99,\n  \"quantity\": 100,\n  \"description\": \"Premium golf balls in mint condition\",\n  \"imageUrl\": \"https://example.com/titleist-prov1.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/golfballs",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "golfballs"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Golf Ball",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"brand\": \"Titleist\",\n  \"model\": \"Pro V1\",\n  \"condition\": \"MINT\",\n  \"price\": 27.99,\n  \"quantity\": 150,\n  \"description\": \"Premium golf balls - Price reduced!\",\n  \"imageUrl\": \"https://example.com/titleist-prov1.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/golfballs/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "golfballs", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Golf Ball",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/golfballs/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "golfballs", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter Golf Balls",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/golfballs/filter?brand=Titleist&condition=MINT&minPrice=20&maxPrice=35",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "golfballs", "filter"],
+							"query": [
+								{
+									"key": "brand",
+									"value": "Titleist"
+								},
+								{
+									"key": "condition",
+									"value": "MINT"
+								},
+								{
+									"key": "minPrice",
+									"value": "20"
+								},
+								{
+									"key": "maxPrice",
+									"value": "35"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Golf Balls by Brand",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/golfballs/brand/Titleist",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "golfballs", "brand", "Titleist"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Golf Balls by Condition",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/golfballs/condition/MINT",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "golfballs", "condition", "MINT"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Brands",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/golfballs/brands",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "golfballs", "brands"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Stock",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/golfballs/1/stock?quantity=50",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "golfballs", "1", "stock"],
+							"query": [
+								{
+									"key": "quantity",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Get All Customers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/customers",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "customers"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/customers/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "customers", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Customer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"phone\": \"+1234567890\",\n  \"address\": {\n    \"street\": \"123 Golf Lane\",\n    \"city\": \"Golftown\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/customers",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "customers"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"phone\": \"+1987654321\",\n  \"address\": {\n    \"street\": \"456 Fairway Dr\",\n    \"city\": \"Golfville\",\n    \"postalCode\": \"54321\",\n    \"country\": \"USA\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/customers/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "customers", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/customers/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "customers", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer by Email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/customers/email/john.doe@example.com",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "customers", "email", "john.doe@example.com"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Get All Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/orders",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "orders"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/orders/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "orders", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customerId\": 1,\n  \"items\": [\n    {\n      \"golfBallId\": 1,\n      \"quantity\": 2,\n      \"unitPrice\": 29.99\n    },\n    {\n      \"golfBallId\": 2,\n      \"quantity\": 1,\n      \"unitPrice\": 24.99\n    }\n  ],\n  \"shippingAddress\": {\n    \"street\": \"123 Golf Lane\",\n    \"city\": \"Golftown\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/orders",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "orders"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"PAID\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/orders/1/status",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "orders", "1", "status"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/orders/1/cancel",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "orders", "1", "cancel"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orders by Customer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/orders/customer/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "orders", "customer", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orders by Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/orders/status/PENDING",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "orders", "status", "PENDING"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Health & Monitoring",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/actuator/health",
+							"host": ["{{base_url}}"],
+							"path": ["actuator", "health"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Circuit Breaker Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/actuator/health",
+							"host": ["{{base_url}}"],
+							"path": ["actuator", "health"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gateway Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/actuator/health",
+							"host": ["{{gateway_url}}"],
+							"path": ["actuator", "health"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eureka Dashboard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{eureka_url}}",
+							"host": ["{{eureka_url}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

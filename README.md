@@ -215,6 +215,11 @@ cd FairwayEcoEureka
 │ ├── package.json # Node dependencies
 │ ├── Dockerfile # Frontend container image
 │ └── nginx.conf # Nginx reverse proxy
+├── postman/ # Postman collections & environments
+│ ├── Fairway-Eco.postman_collection.json
+│ ├── Fairway-Eco-Local.postman_environment.json
+│ ├── Fairway-Eco-Docker.postman_environment.json
+│ └── README.md # Postman usage guide
 ├── docker-compose.yml # Full stack orchestration
 └── .github/workflows/ # GitHub Actions CI/CD
 
@@ -266,7 +271,51 @@ cd FairwayEcoFrontend
 npm run lint
 ```
 
-##Eureka connection errors\*\*: Ensure Eureka Server is running on port 8761. Check service registration at http://localhost:8761
+## API Testing with Postman
+
+The project includes comprehensive Postman collections for testing all API endpoints.
+
+### Import Collections
+
+1. Open Postman
+2. Click **Import** → **Choose Files**
+3. Select files from `postman/` directory:
+   - `Fairway-Eco.postman_collection.json` (Main collection)
+   - `Fairway-Eco-Local.postman_environment.json` (Local environment)
+   - `Fairway-Eco-Docker.postman_environment.json` (Docker environment)
+
+### Available Endpoints
+
+**Golf Balls API** (10 endpoints):
+
+- CRUD operations (Create, Read, Update, Delete)
+- Filter by brand, condition, price range
+- Stock management
+
+**Customers API** (6 endpoints):
+
+- Customer management
+- Search by email
+- Address handling
+
+**Orders API** (7 endpoints):
+
+- Order creation and management
+- Status updates (PENDING → PAID → PROCESSING → SHIPPED → DELIVERED)
+- Order cancellation
+- Filter by customer and status
+
+**Health & Monitoring** (4 endpoints):
+
+- Service health checks
+- Circuit breaker status
+- Eureka dashboard
+
+For detailed usage instructions, see [postman/README.md](postman/README.md)
+
+## Troubleshooting
+
+**Eureka connection errors**: Ensure Eureka Server is running on port 8761. Check service registration at http://localhost:8761
 
 **Service not registered**: Wait 30 seconds after startup for services to register with Eureka. Check application logs for connection errors.
 
@@ -293,6 +342,7 @@ Check Circuit Breaker status at: http://localhost:8080/actuator/health (look for
 - ✅ **Production-ready CORS** configuration
 - ✅ **Health Checks** for all services
 - ✅ **Comprehensive Unit Tests** (89 tests across all layers)
+- ✅ **Postman Collections** for API testing
 
 - Gateway: Change `server.port` in `FairwayEcoGateway/src/main/resources/application.properties`
 - Backend: Change `server.port` in `FairwayEcoBackend/src/main/resources/application.properties`
