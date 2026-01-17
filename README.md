@@ -7,6 +7,7 @@ Golf ball trading platform with microservices architecture.
 - **Frontend**: React + TypeScript + Vite (Port 3000)
 - **Gateway**: Spring Cloud Gateway (Port 8090) - API Gateway with Circuit Breaker
 - **Backend**: Spring Boot + Kafka (Port 8080)
+- **Eureka Server**: Service Discovery (Port 8761)
 - **Database**: MySQL
 - **Message Queue**: Apache Kafka
 - **Monitoring**: Kafka UI
@@ -15,6 +16,8 @@ Golf ball trading platform with microservices architecture.
 
 ```
 Frontend (Port 3000) → Gateway (Port 8090) → Backend (Port 8080) → MySQL + Kafka
+                              ↓ Service Discovery ↓
+                          Eureka Server (Port 8761)
 ```
 
 The Gateway acts as the single entry point for all API requests, providing:
@@ -25,6 +28,13 @@ The Gateway acts as the single entry point for all API requests, providing:
 - CORS handling
 - Centralized error handling
 
+The Eureka Server provides:
+
+- Service registration and discovery
+- Dynamic service location
+- Health monitoring of microservices
+- Load balancing support
+
 ## Prerequisites
 
 - Docker & Docker Compose
@@ -33,9 +43,15 @@ The Gateway acts as the single entry point for all API requests, providing:
 
 ## Quick Start (Docker Compose)
 
-```bash
-docker-compose up -d
-```
+Eureka Server: http://localhost:8761
+
+- Kafka UI: http://localhost:8082
+
+**Note**: Access all API endpoints through the Gateway at `http://localhost:8090/api/*`
+
+**Service Discovery**: Check registered services at http://localhost:8761
+
+````
 
 This will start:
 
@@ -67,7 +83,7 @@ docker-compose -f ../docker-compose.yml up mysql kafka zookeeper
 
 # Build and run
 ./mvnw clean spring-boot:run
-```
+````
 
 Backend runs on **http://localhost:8080**
 
@@ -79,6 +95,19 @@ cd FairwayEcoGateway
 # Build and run
 ./mvnw spring-boot:run
 ```
+
+Eureka Server
+
+```bash
+cd FairwayEcoEureka
+
+# Build and run
+./mvnw spring-boot:run
+```
+
+Eureka Server runs on **http://localhost:8761**
+
+###
 
 Gateway runs on **http://localhost:8090**
 
@@ -111,11 +140,22 @@ The frontend connects to the backend via the API client:
 
 ## Environment Variables
 
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
+
+````
+
+### Eureka Server (`application.properties`)
+
+```properties
+server.port=8761
+eureka.client.register-with-eureka=false
+eureka.client.fetch-registry=false
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
 ### Frontend (`.env.local`)
 
 ```env
 VITE_API_URL=http://localhost:8090/api
-```
+````
 
 ### Gateway (`application.properties`)
 
@@ -148,24 +188,37 @@ spring.kafka.bootstrap-servers=localhost:9092
 
 ## Project Structure
 
-```
+````Eureka/ # Eureka Service Discovery
+│   ├── src/main/java/       # Java source code
+│   ├── pom.xml              # Maven configuration
+│   └── Dockerfile           # Eureka container image
+├── FairwayEco
 Fairway-Eco/
 ├── FairwayEcoGateway/        # Spring Cloud Gateway (API Gateway)
 │   ├── src/main/java/       # Java source code
 │   ├── pom.xml              # Maven configuration
 │   └── Dockerfile           # Gateway container image
 ├── FairwayEcoBackend/       # Spring Boot backend
-│   ├── src/main/java/       # Java source code
-│   ├── pom.xml              # Maven configuration
-│   └── Dockerfile           # Backend container image
-├── FairwayEcoFrontend/      # React frontend
-│   ├── src/                 # React components & pages
-│   ├── package.json         # Node dependencies
-│   ├── Dockerfile           # Frontend container image
-│   └── nginx.conf           # Nginx reverse proxy
-├── docker-compose.yml       # Full stack orchestration
-└── .github/workflows/       # GitHub Actions CI/CD
-```
+│   Eureka Server
+
+```bash
+cd FairwayEcoEureka
+./mvnw test
+````
+
+### ├── src/main/java/ # Java source code
+
+│ ├── pom.xml # Maven configuration
+│ └── Dockerfile # Backend container image
+├── FairwayEcoFrontend/ # React frontend
+│ ├── src/ # React components & pages
+│ ├── package.json # Node dependencies
+│ ├── Dockerfile # Frontend container image
+│ └── nginx.conf # Nginx reverse proxy
+├── docker-compose.yml # Full stack orchestration
+└── .github/workflows/ # GitHub Actions CI/CD
+
+````
 
 ## Testing
 
@@ -174,7 +227,7 @@ Fairway-Eco/
 ```bash
 cd FairwayEcoGateway
 ./mvnw test
-```
+````
 
 ### Backend
 
@@ -190,9 +243,24 @@ cd FairwayEcoFrontend
 npm run lint
 ```
 
-## Troubleshooting
+##Eureka connection errors\*\*: Ensure Eureka Server is running on port 8761. Check service registration at http://localhost:8761
 
-**Port conflicts**: If ports are in use:
+**Service not registered**: Wait 30 seconds after startup for services to register with Eureka. Check application logs for connection errors.
+
+**CORS errors**: CORS is handled by the Gateway. Check `FairwayEcoGateway/src/main/java/bbw/ch/gateway/config/CorsConfig.java`
+
+**Circuit Breaker**: If services are unavailable, the Gateway returns fallback responses with HTTP 503
+
+## Features
+
+- ✅ **Microservices Architecture** with Spring Cloud
+- ✅ **API Gateway** with Spring Cloud Gateway
+- ✅ **Service Discovery** with Netflix Eureka
+- ✅ **Circuit Breaker** with Resilience4j
+- ✅ **Event-Driven** with Apache Kafka
+- ✅ **Docker Compose** for full-stack deployment
+- ✅ **Production-ready CORS** configuration
+- ✅ **Health Checks** for all services
 
 - Gateway: Change `server.port` in `FairwayEcoGateway/src/main/resources/application.properties`
 - Backend: Change `server.port` in `FairwayEcoBackend/src/main/resources/application.properties`
