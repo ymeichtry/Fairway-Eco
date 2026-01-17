@@ -13,11 +13,13 @@ import bbw.ch.FairwayEcoBackend.model.*;
 import bbw.ch.FairwayEcoBackend.repository.CustomerRepository;
 import bbw.ch.FairwayEcoBackend.repository.GolfBallRepository;
 import bbw.ch.FairwayEcoBackend.repository.OrderRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +40,7 @@ public class OrderServiceImpl implements OrderService {
   private final OrderEventPublisher orderEventPublisher;
 
   @Override
+  @CircuitBreaker(name = "orderService", fallbackMethod = "createOrderFallback")
   public OrderResponseDto createOrder(OrderCreateDto dto) {
     log.info("Creating new order for customer ID: {}", dto.getCustomerId());
 
@@ -89,6 +92,7 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   @Transactional(readOnly = true)
+  @CircuitBreaker(name = "orderService", fallbackMethod = "getOrderByIdFallback")
   public OrderResponseDto getOrderById(Long id) {
     Order order = findOrderById(id);
     return orderMapper.toResponseDto(order);
@@ -96,6 +100,7 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   @Transactional(readOnly = true)
+  @CircuitBreaker(name = "orderService", fallbackMethod = "getAllOrdersFallback")
   public List<OrderResponseDto> getAllOrders() {
     return orderRepository.findAll().stream()
         .map(orderMapper::toResponseDto)
@@ -104,6 +109,7 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   @Transactional(readOnly = true)
+  @CircuitBreaker(name = "orderService", fallbackMethod = "getOrdersByCustomerIdFallback")
   public List<OrderResponseDto> getOrdersByCustomerId(Long customerId) {
     return orderRepository.findByCustomerId(customerId).stream()
         .map(orderMapper::toResponseDto)
@@ -112,6 +118,7 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   @Transactional(readOnly = true)
+  @CircuitBreaker(name = "orderService", fallbackMethod = "getOrdersByStatusFallback")
   public List<OrderResponseDto> getOrdersByStatus(OrderStatus status) {
     return orderRepository.findByStatus(status).stream()
         .map(orderMapper::toResponseDto)
@@ -119,6 +126,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
+  @CircuitBreaker(name = "orderService", fallbackMethod = "updateOrderStatusFallback")
   public OrderResponseDto updateOrderStatus(Long id, OrderStatus newStatus) {
     log.info("Updating order {} status to: {}", id, newStatus);
     Order order = findOrderById(id);
@@ -137,6 +145,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
+  @CircuitBreaker(name = "orderService", fallbackMethod = "cancelOrderFallback")
   public void cancelOrder(Long id) {
     log.info("Cancelling order with ID: {}", id);
     Order order = findOrderById(id);
@@ -206,5 +215,41 @@ public class OrderServiceImpl implements OrderService {
         throw new InvalidOrderStateException(
             "Cannot transition from " + currentStatus + " to any other status");
     }
+  }
+
+  // Fallback methods
+  private OrderResponseDto createOrderFallback(OrderCreateDto dto, Exception ex) {
+    log.error("Circuit breaker fallback: Failed to create order for customer ID: {}", dto.getCustomerId(), ex);
+    throw new RuntimeException("Service temporarily unavailable. Please try again later.");
+  }
+
+  private OrderResponseDto getOrderByIdFallback(Long id, Exception ex) {
+    log.error("Circuit breaker fallback: Failed to get order with ID: {}", id, ex);
+    throw new RuntimeException("Service temporarily unavailable. Please try again later.");
+  }
+
+  private List<OrderResponseDto> getAllOrdersFallback(Exception ex) {
+    log.error("Circuit breaker fallback: Failed to get all orders", ex);
+    return new ArrayList<>();
+  }
+
+  private List<OrderResponseDto> getOrdersByCustomerIdFallback(Long customerId, Exception ex) {
+    log.error("Circuit breaker fallback: Failed to get orders for customer ID: {}", customerId, ex);
+    return new ArrayList<>();
+  }
+
+  private List<OrderResponseDto> getOrdersByStatusFallback(OrderStatus status, Exception ex) {
+    log.error("Circuit breaker fallback: Failed to get orders by status: {}", status, ex);
+    return new ArrayList<>();
+  }
+
+  private OrderResponseDto updateOrderStatusFallback(Long id, OrderStatus newStatus, Exception ex) {
+    log.error("Circuit breaker fallback: Failed to update order {} status to: {}", id, newStatus, ex);
+    throw new RuntimeException("Service temporarily unavailable. Please try again later.");
+  }
+
+  private void cancelOrderFallback(Long id, Exception ex) {
+    log.error("Circuit breaker fallback: Failed to cancel order with ID: {}", id, ex);
+    throw new RuntimeException("Service temporarily unavailable. Please try again later.");
   }
 }

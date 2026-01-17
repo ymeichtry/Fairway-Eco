@@ -249,14 +249,22 @@ npm run lint
 
 **CORS errors**: CORS is handled by the Gateway. Check `FairwayEcoGateway/src/main/java/bbw/ch/gateway/config/CorsConfig.java`
 
-**Circuit Breaker**: If services are unavailable, the Gateway returns fallback responses with HTTP 503
+**Circuit Breaker**: The project implements a two-level Circuit Breaker pattern:
+
+- **Gateway Level**: Returns fallback responses (HTTP 503) when backend services are unreachable
+- **Service Level**: Each service method has @CircuitBreaker annotations with fallback methods
+  - GolfBallService: Handles product catalog failures gracefully
+  - CustomerService: Manages customer data access failures
+  - OrderService: Protects order processing from cascading failures
+
+Check Circuit Breaker status at: http://localhost:8080/actuator/health (look for `circuitBreakers` component)
 
 ## Features
 
 - ✅ **Microservices Architecture** with Spring Cloud
 - ✅ **API Gateway** with Spring Cloud Gateway
 - ✅ **Service Discovery** with Netflix Eureka
-- ✅ **Circuit Breaker** with Resilience4j
+- ✅ **Circuit Breaker Pattern** with Resilience4j (Gateway + Service Level)
 - ✅ **Event-Driven** with Apache Kafka
 - ✅ **Docker Compose** for full-stack deployment
 - ✅ **Production-ready CORS** configuration
