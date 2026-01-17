@@ -48,7 +48,7 @@ public class GolfBall {
 
   @NotNull(message = "Condition is required")
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
+  @Column(name = "ball_condition", nullable = false)
   private BallCondition condition;
 
   @Size(max = 500)

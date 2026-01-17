@@ -1,6 +1,7 @@
 package bbw.ch.FairwayEcoBackend.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -16,93 +17,95 @@ import java.util.stream.Collectors;
  * Global exception handler for REST controllers.
  */
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
-  @ExceptionHandler(ResourceNotFoundException.class)
-  public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
-      ResourceNotFoundException ex, HttpServletRequest request) {
-    ErrorResponse error = ErrorResponse.builder()
-        .timestamp(LocalDateTime.now())
-        .status(HttpStatus.NOT_FOUND.value())
-        .error(HttpStatus.NOT_FOUND.getReasonPhrase())
-        .message(ex.getMessage())
-        .path(request.getRequestURI())
-        .build();
-    return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-  }
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
+            ResourceNotFoundException ex, HttpServletRequest request) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 
-  @ExceptionHandler(InsufficientStockException.class)
-  public ResponseEntity<ErrorResponse> handleInsufficientStockException(
-      InsufficientStockException ex, HttpServletRequest request) {
-    ErrorResponse error = ErrorResponse.builder()
-        .timestamp(LocalDateTime.now())
-        .status(HttpStatus.BAD_REQUEST.value())
-        .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
-        .message(ex.getMessage())
-        .path(request.getRequestURI())
-        .build();
-    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-  }
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<ErrorResponse> handleInsufficientStockException(
+            InsufficientStockException ex, HttpServletRequest request) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
 
-  @ExceptionHandler(DuplicateResourceException.class)
-  public ResponseEntity<ErrorResponse> handleDuplicateResourceException(
-      DuplicateResourceException ex, HttpServletRequest request) {
-    ErrorResponse error = ErrorResponse.builder()
-        .timestamp(LocalDateTime.now())
-        .status(HttpStatus.CONFLICT.value())
-        .error(HttpStatus.CONFLICT.getReasonPhrase())
-        .message(ex.getMessage())
-        .path(request.getRequestURI())
-        .build();
-    return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-  }
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateResourceException(
+            DuplicateResourceException ex, HttpServletRequest request) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error(HttpStatus.CONFLICT.getReasonPhrase())
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
 
-  @ExceptionHandler(InvalidOrderStateException.class)
-  public ResponseEntity<ErrorResponse> handleInvalidOrderStateException(
-      InvalidOrderStateException ex, HttpServletRequest request) {
-    ErrorResponse error = ErrorResponse.builder()
-        .timestamp(LocalDateTime.now())
-        .status(HttpStatus.BAD_REQUEST.value())
-        .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
-        .message(ex.getMessage())
-        .path(request.getRequestURI())
-        .build();
-    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-  }
+    @ExceptionHandler(InvalidOrderStateException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidOrderStateException(
+            InvalidOrderStateException ex, HttpServletRequest request) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
 
-  @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ErrorResponse> handleValidationException(
-      MethodArgumentNotValidException ex, HttpServletRequest request) {
-    BindingResult bindingResult = ex.getBindingResult();
-    List<ErrorResponse.FieldError> fieldErrors = bindingResult.getFieldErrors().stream()
-        .map(fe -> ErrorResponse.FieldError.builder()
-            .field(fe.getField())
-            .message(fe.getDefaultMessage())
-            .rejectedValue(fe.getRejectedValue())
-            .build())
-        .collect(Collectors.toList());
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationException(
+            MethodArgumentNotValidException ex, HttpServletRequest request) {
+        BindingResult bindingResult = ex.getBindingResult();
+        List<ErrorResponse.FieldError> fieldErrors = bindingResult.getFieldErrors().stream()
+                .map(fe -> ErrorResponse.FieldError.builder()
+                        .field(fe.getField())
+                        .message(fe.getDefaultMessage())
+                        .rejectedValue(fe.getRejectedValue())
+                        .build())
+                .collect(Collectors.toList());
 
-    ErrorResponse error = ErrorResponse.builder()
-        .timestamp(LocalDateTime.now())
-        .status(HttpStatus.BAD_REQUEST.value())
-        .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
-        .message("Validation failed")
-        .path(request.getRequestURI())
-        .fieldErrors(fieldErrors)
-        .build();
-    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-  }
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message("Validation failed")
+                .path(request.getRequestURI())
+                .fieldErrors(fieldErrors)
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
 
-  @ExceptionHandler(Exception.class)
-  public ResponseEntity<ErrorResponse> handleGenericException(
-      Exception ex, HttpServletRequest request) {
-    ErrorResponse error = ErrorResponse.builder()
-        .timestamp(LocalDateTime.now())
-        .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-        .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
-        .message("An unexpected error occurred")
-        .path(request.getRequestURI())
-        .build();
-    return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
-  }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGenericException(
+            Exception ex, HttpServletRequest request) {
+        log.error("Unexpected error occurred at {}: {}", request.getRequestURI(), ex.getMessage(), ex);
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+                .message("An unexpected error occurred")
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

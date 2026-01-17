@@ -4,11 +4,26 @@ Golf ball trading platform with microservices architecture.
 
 ## Architecture
 
-- **Frontend**: React + TypeScript + Vite (Port 8080)
+- **Frontend**: React + TypeScript + Vite (Port 3000)
+- **Gateway**: Spring Cloud Gateway (Port 8090) - API Gateway with Circuit Breaker
 - **Backend**: Spring Boot + Kafka (Port 8080)
 - **Database**: MySQL
 - **Message Queue**: Apache Kafka
 - **Monitoring**: Kafka UI
+
+## Architecture Flow
+
+```
+Frontend (Port 3000) → Gateway (Port 8090) → Backend (Port 8080) → MySQL + Kafka
+```
+
+The Gateway acts as the single entry point for all API requests, providing:
+
+- Request routing to backend services
+- Circuit breaker pattern for fault tolerance
+- Retry logic for failed requests
+- CORS handling
+- Centralized error handling
 
 ## Prerequisites
 
@@ -23,9 +38,13 @@ docker-compose up -d
 ```
 
 This will start:
-- Frontend: http://localhost:8080
-- Backend API: http://localhost:8080/api
+
+- Frontend: http://localhost:3000
+- Gateway: http://localhost:8090
+- Backend API: http://localhost:8080
 - Kafka UI: http://localhost:8082
+
+**Note**: Access all API endpoints through the Gateway at `http://localhost:8090/api/*`
 
 ## Local Development Setup
 
@@ -52,6 +71,17 @@ docker-compose -f ../docker-compose.yml up mysql kafka zookeeper
 
 Backend runs on **http://localhost:8080**
 
+### Gateway
+
+```bash
+cd FairwayEcoGateway
+
+# Build and run
+./mvnw spring-boot:run
+```
+
+Gateway runs on **http://localhost:8090**
+
 ### Frontend
 
 ```bash
@@ -61,7 +91,7 @@ cd FairwayEcoFrontend
 npm install
 
 # Create .env.local (if not present)
-echo "VITE_API_URL=http://localhost:8080/api" > .env.local
+echo "VITE_API_URL=http://localhost:8090/api" > .env.local
 
 # Development server
 npm run dev
@@ -72,6 +102,7 @@ Frontend runs on **http://localhost:8080**
 ## API Integration
 
 The frontend connects to the backend via the API client:
+
 - **Endpoint**: `VITE_API_URL` (defaults to `http://localhost:8080/api`)
 - **Services**: Located in `src/api/services.ts`
   - `golfBallService` - Golf ball CRUD operations
@@ -83,7 +114,14 @@ The frontend connects to the backend via the API client:
 ### Frontend (`.env.local`)
 
 ```env
-VITE_API_URL=http://localhost:8081/api
+VITE_API_URL=http://localhost:8090/api
+```
+
+### Gateway (`application.properties`)
+
+```properties
+server.port=8090
+backend.service.url=http://localhost:8080
 ```
 
 ### Backend (`application.properties`)
@@ -98,6 +136,7 @@ spring.kafka.bootstrap-servers=localhost:9092
 ## CI/CD
 
 - **CI Workflow** (`.github/workflows/ci.yml`):
+
   - Backend: Maven build & tests
   - Frontend: Node build & lint
   - Integration tests with MySQL
@@ -111,6 +150,10 @@ spring.kafka.bootstrap-servers=localhost:9092
 
 ```
 Fairway-Eco/
+├── FairwayEcoGateway/        # Spring Cloud Gateway (API Gateway)
+│   ├── src/main/java/       # Java source code
+│   ├── pom.xml              # Maven configuration
+│   └── Dockerfile           # Gateway container image
 ├── FairwayEcoBackend/       # Spring Boot backend
 │   ├── src/main/java/       # Java source code
 │   ├── pom.xml              # Maven configuration
@@ -126,13 +169,22 @@ Fairway-Eco/
 
 ## Testing
 
+### Gateway
+
+```bash
+cd FairwayEcoGateway
+./mvnw test
+```
+
 ### Backend
+
 ```bash
 cd FairwayEcoBackend
 ./mvnw test
 ```
 
 ### Frontend
+
 ```bash
 cd FairwayEcoFrontend
 npm run lint
@@ -140,10 +192,16 @@ npm run lint
 
 ## Troubleshooting
 
-**Port conflicts**: If port 8080/8081 are in use:
-- Change frontend port in `FairwayEcoFrontend/vite.config.ts` → `server.port`
-- Change backend port in `FairwayEcoBackend/src/main/resources/application.properties` → `server.port`
+**Port conflicts**: If ports are in use:
+
+- Gateway: Change `server.port` in `FairwayEcoGateway/src/main/resources/application.properties`
+- Backend: Change `server.port` in `FairwayEcoBackend/src/main/resources/application.properties`
+- Frontend: Change `server.port` in `FairwayEcoFrontend/vite.config.ts`
 
 **Database connection**: Ensure MySQL is running and credentials match `application.properties`
 
-**CORS errors**: Check `FairwayEcoBackend/src/main/java/bbw/ch/FairwayEcoBackend/config/CorsConfig.java` for allowed origins
+**Gateway connection errors**: Verify backend service URL in Gateway's `application.properties`
+
+**CORS errors**: CORS is handled by the Gateway. Check `FairwayEcoGateway/src/main/java/bbw/ch/gateway/config/CorsConfig.java`
+
+**Circuit Breaker**: If services are unavailable, the Gateway returns fallback responses with HTTP 503

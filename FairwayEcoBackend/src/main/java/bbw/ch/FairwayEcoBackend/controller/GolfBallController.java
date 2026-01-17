@@ -19,7 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/golf-balls")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class GolfBallController {
 
   private final GolfBallService golfBallService;
