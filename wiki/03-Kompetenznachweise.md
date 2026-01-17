@@ -14,7 +14,7 @@ Dieses Dokument weist nach, wie alle geforderten Kompetenzen im Fairway-Eco Proj
 
 **Ausgangssituation**: Traditionelle monolithische E-Commerce-Anwendung  
 **Ziel**: Verteilte Microservices-Architektur
-![alt text](microservice.png)
+![alt text](images/microservice.png)
 
 #### 2. Implementierte Verteilungs-Strategien
 
@@ -81,7 +81,7 @@ spring:
 ### Nachweis im Projekt
 
 #### 1. Integrations-Patterns implementiert
-![alt text](patterns.png)
+![alt text](images/patterns.png)
 
 #### 2. Synchrone Integration: API Gateway
 
@@ -171,7 +171,7 @@ public class EmailNotificationService {
 **Lösung**: Eureka Service Registry
 
 **Integrations-Flow**:
-![alt text](integrations-flow.png)
+![alt text](images/integrations-flow.png)
 
 #### 5. Resilience Integration: Circuit Breaker
 
@@ -223,7 +223,7 @@ public class FallbackController {
 ### Nachweis im Projekt
 
 #### 1. Data Management Strategie
-![alt text](data-types.png)
+![alt text](images/data-types.png)
 
 #### 2. Technologie-Evaluation
 
@@ -369,7 +369,7 @@ public class OrderEvent {
 ### Nachweis im Projekt
 
 #### 1. Evaluierte Komponenten
-![alt text](komponente.png)
+![alt text](images/komponente.png)
 
 #### 2. API Gateway Evaluation
 
@@ -444,7 +444,7 @@ public class OrderEvent {
 - Vite für schnellen Build-Prozess
 
 #### 6. Evaluation-Kriterien Übersicht
-![alt text](kriterien.png)
+![alt text](images/kriterien.png)
 
 ### Ergebnis
 
@@ -461,7 +461,7 @@ public class OrderEvent {
 ### Nachweis im Projekt
 
 #### 1. Datenaustausch-Szenarien
-![alt text](datenaustausch.png)
+![alt text](images/datenaustausch.png)
 
 #### 2. REST API für Synchrone Kommunikation
 
@@ -610,7 +610,7 @@ public class OrderServiceImpl implements OrderService {
 ### Nachweis im Projekt
 
 #### 1. Protokoll-Evaluation
-![alt text](protokoll-evaluation.png)
+![alt text](images/protokoll-evaluation.png)
 
 #### 2. REST/HTTP Beurteilung
 
@@ -711,7 +711,7 @@ spring:
 **Entscheidung**: REST für simplicity
 
 #### 5. Beurteilungs-Framework
-![alt text](beurteilungs-framework.png)
+![alt text](images/beurteilungs-framework.png)
 
 #### 6. Implementierte Protokoll-Standards
 
@@ -744,7 +744,7 @@ spring:
 ### Nachweis im Projekt
 
 #### 1. Monitoring-Architektur
-![alt text](monitoring-architektur.png)
+![alt text](images/monitoring-architektur.png)
 
 #### 2. Monitoring-Anforderungen definiert
 

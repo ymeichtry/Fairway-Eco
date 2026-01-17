@@ -7,7 +7,7 @@ Dieses Dokument beschreibt die technische Implementierung der Fairway-Eco Micros
 ### 1. API Gateway Pattern
 
 Das Gateway ist der zentrale Einstiegspunkt für alle Client-Anfragen.
-![alt text](api-gateway-pattern.png)
+![alt text](images/api-gateway-pattern.png)
 
 #### Gateway Konfiguration
 
@@ -45,7 +45,7 @@ spring:
 ### 2. Service Discovery Pattern
 
 Eureka ermöglicht automatische Service-Registrierung und -Erkennung.
-![alt text](service-discovery-pattern.png)
+![alt text](images/service-discovery-pattern.png)
 
 #### Eureka Konfiguration
 
@@ -80,7 +80,7 @@ eureka:
 ### 3. Event-Driven Architecture
 
 Kafka ermöglicht asynchrone, entkoppelte Kommunikation zwischen Services.
-![alt text](event-driven-architecture.png)
+![alt text](images/event-driven-architecture.png)
 
 #### Kafka Integration
 
@@ -120,7 +120,7 @@ public class OrderEventProducer {
 ### 4. Circuit Breaker Pattern
 
 Resilience4j schützt vor Cascade-Failures.
-![alt text](circuit-breaker-pattern.png)
+![alt text](images/circuit-breaker-pattern.png)
 
 #### Circuit Breaker Konfiguration
 
@@ -165,7 +165,7 @@ public class FallbackController {
 ## 🗄️ Datenbank-Schema
 
 ### Entity-Relationship Diagramm
-![alt text](erd.png)
+![alt text](images/erd.png)
 
 ### Datenbank-Normalisierung
 
@@ -189,7 +189,7 @@ CREATE INDEX idx_golf_ball_condition ON golf_ball(condition);
 ## 🔄 API-Architektur
 
 ### REST API Design
-![alt text](rest-api-design.png)
+![alt text](images/rest-api-design.png)
 
 ### API Endpoints Übersicht
 
@@ -274,7 +274,7 @@ CREATE INDEX idx_golf_ball_condition ON golf_ball(condition);
 ```
 
 ## 🏗️ Layered Architecture
-![alt text](layered-architecture.png)
+![alt text](images/layered-architecture.png)
 
 ### Schichten-Beschreibung
 
@@ -305,7 +305,7 @@ CREATE INDEX idx_golf_ball_condition ON golf_ball(condition);
 ## 🔐 Security Konzept
 
 ### Geplante Security-Features
-![alt text](geplante-security-features.png)
+![alt text](images/geplante-security-features.png)
 
 **Aktuelle Implementierung**:
 
@@ -321,7 +321,7 @@ CREATE INDEX idx_golf_ball_condition ON golf_ball(condition);
 - API Rate Limiting
 
 ## 📊 Monitoring & Observability
-![alt text](monitoring.png)
+![alt text](images/monitoring.png)
 
 ### Health Endpoints
 

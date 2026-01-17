@@ -15,29 +15,29 @@
 ## 🏗️ Architekturskizze
 
 ### Gesamtarchitektur
-![alt text](Gesamtarchitektur.png)
+![alt text](images/Gesamtarchitektur.png)
 
 ### Request Flow Diagramm
 ![alt text](<Request Flow Diagramm.png>)
 
 ### Deployment-Architektur
-![alt text](Deployment-Architektur.png)
+![alt text](images/Deployment-Architektur.png)
 
 ## 📋 Workflow im Projekt
 
 ### 1. Entwicklungs-Workflow
-![alt text](Entwicklungs-Workflow.png)
+![alt text](images/Entwicklungs-Workflow.png)
 
 ### 2. Git-Workflow
-![alt text](Git-Workflow.png)
+![alt text](images/Git-Workflow.png)
 
 ### 3. Deployment-Workflow
-![alt text](Deployment-Workflow.png)
+![alt text](images/Deployment-Workflow.png)
 
 ## 🎨 User Interface
-![alt text](home-page.png)
-![alt text](shop-page.png)
-![alt text](your-cart-page.png)
+![alt text](images/home-page.png)
+![alt text](images/shop-page.png)
+![alt text](images/your-cart-page.png)
 
 Die Benutzeroberfläche bietet:
 
